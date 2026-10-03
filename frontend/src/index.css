@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Figtree", "Segoe UI", sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
+  --color-paper: #f3efe6;
+  --color-ink: #1b1914;
+  --color-seal: #1f6b4a;
+  --color-navy: #141c27;
+  --color-line: #e3d9c6;
+  --color-muted: #5e564c;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-seal);
+  outline-offset: 2px;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  font: inherit;
+}
