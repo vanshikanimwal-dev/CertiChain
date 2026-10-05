@@ -1,5 +1,9 @@
 import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 
+export function LogoMark({ className = "h-11 w-11" }: { className?: string }) {
+  return <img src="/logo.png" alt="" className={`rounded-full object-cover ${className}`} />;
+}
+
 const inputClass =
   "w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm text-ink shadow-sm outline-none transition placeholder:text-muted/70 focus:border-seal focus:ring-2 focus:ring-seal/15";
 

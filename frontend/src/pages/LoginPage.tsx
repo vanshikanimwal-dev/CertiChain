@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { Button, Field, TextInput } from "../components/ui";
+import { Button, Field, LogoMark, TextInput } from "../components/ui";
 import { useRecords } from "../state/records";
 import { DEMO_ADMIN, INSTITUTION_NAME } from "../types";
 
@@ -38,9 +38,7 @@ export function LoginPage() {
         <div className="pointer-events-none absolute -top-4 -right-4 h-40 w-40 rounded-full border border-white/10" />
         <div className="pointer-events-none absolute bottom-16 -left-20 h-56 w-56 rounded-full bg-seal/20 blur-3xl" />
         <div className="relative">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-brass/80 font-serif text-sm tracking-[0.14em] text-brass">
-            CC
-          </div>
+          <LogoMark className="h-16 w-16" />
           <p className="mt-8 text-xs font-semibold tracking-[0.2em] text-brass uppercase">CertiChain</p>
           <h1 className="mt-4 max-w-lg font-serif text-5xl leading-[1.05] sm:text-6xl">
             Issue a certificate once.

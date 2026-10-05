@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { API_BASE } from "../../api/client";
-import { Button, StatusPill } from "../../components/ui";
+import { Button, LogoMark, StatusPill } from "../../components/ui";
 import { chainSummary, formatIssueDate } from "../../lib/format";
 import { shortHash } from "../../lib/hash";
 import { INSTITUTION_NAME, type VerificationResult } from "../../types";
@@ -135,9 +135,7 @@ export function VerifyPage() {
     <div className="min-h-screen">
       <header className="flex items-center justify-between border-b border-line/80 bg-white/70 px-4 py-4 backdrop-blur sm:px-8">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full border border-brass font-serif text-[10px] tracking-[0.12em] text-brass">
-            CC
-          </div>
+          <LogoMark className="h-10 w-10" />
           <p className="font-serif text-2xl text-ink">CertiChain</p>
         </div>
         <p className="text-[11px] font-semibold tracking-[0.16em] text-muted uppercase">Public verification</p>

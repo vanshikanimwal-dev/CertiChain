@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { LogoMark } from "./ui";
 import { INSTITUTION_NAME } from "../types";
 import { useRecords } from "../state/records";
 
@@ -21,7 +22,7 @@ export function AdminLayout() {
   }
 
   return (
-    <div className="min-h-screen md:grid md:grid-cols-[260px_1fr]">
+    <div className="min-h-screen bg-paper md:grid md:grid-cols-[240px_1fr]">
       {open ? (
         <button
           className="fixed inset-0 z-20 bg-navy/40 md:hidden"
@@ -34,9 +35,7 @@ export function AdminLayout() {
       >
         <div className="border-b border-white/10 px-5 py-7">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full border border-brass/70 font-serif text-xs tracking-[0.12em] text-brass">
-              CC
-            </div>
+            <LogoMark />
             <div>
               <p className="font-serif text-2xl leading-none">CertiChain</p>
               <p className="mt-1 text-[11px] tracking-[0.16em] text-paper/55 uppercase">{INSTITUTION_NAME}</p>
@@ -83,7 +82,10 @@ export function AdminLayout() {
       </aside>
       <div className="min-w-0">
         <header className="flex items-center justify-between border-b border-line/80 bg-white/70 px-4 py-3 backdrop-blur md:hidden">
-          <p className="font-serif text-xl">CertiChain</p>
+          <div className="flex items-center gap-2">
+            <LogoMark className="h-8 w-8" />
+            <p className="font-serif text-xl">CertiChain</p>
+          </div>
           <button className="rounded-full border border-line bg-white px-3 py-1.5 text-sm font-medium" onClick={() => setOpen(true)}>
             Menu
           </button>

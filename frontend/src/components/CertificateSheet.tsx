@@ -1,4 +1,5 @@
 import { QRCodeSVG } from "qrcode.react";
+import { LogoMark } from "./ui";
 import { formatIssueDate, verificationPath } from "../lib/format";
 import { shortHash } from "../lib/hash";
 import { INSTITUTION_NAME, type Certificate, type Student } from "../types";
@@ -22,9 +23,7 @@ export function CertificateSheet({
           <p className="text-xs font-semibold tracking-[0.2em] text-brass uppercase">{INSTITUTION_NAME}</p>
           <h2 className="mt-3 font-serif text-3xl text-ink">{certificate.certificateType} certificate</h2>
         </div>
-        <div className="hidden h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-seal text-xs font-semibold tracking-[0.14em] text-seal sm:flex">
-          CC
-        </div>
+        <LogoMark className="hidden h-16 w-16 shrink-0 sm:block" />
       </div>
       <p className="mt-8 text-sm text-muted">This record certifies that</p>
       <p className="mt-1 font-serif text-4xl leading-tight text-ink">{student?.name ?? "Unknown student"}</p>
