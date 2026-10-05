@@ -46,8 +46,8 @@ export function CertificatesPage() {
               key={item}
               type="button"
               onClick={() => setFilter(item)}
-              className={`px-3 py-1.5 text-xs font-medium tracking-wide ${
-                filter === item ? "bg-navy text-paper" : "border border-line bg-white text-muted"
+              className={`rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-wide transition ${
+                filter === item ? "bg-navy text-paper shadow-sm" : "border border-line bg-white text-muted hover:border-brass/50"
               }`}
             >
               {item}

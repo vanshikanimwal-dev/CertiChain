@@ -1,9 +1,11 @@
 package com.certichain.api;
 
-import com.certichain.blockchain.LocalChainService;
+import com.certichain.blockchain.ChainService;
 import com.certichain.certificate.CertificateEntity;
 import com.certichain.certificate.CertificateRepository;
 import com.certichain.crypto.CanonicalHasher;
+import com.certichain.document.CertificatePdf;
+import com.certichain.document.CertificateStorage;
 import com.certichain.document.DocumentScanService;
 import com.certichain.student.StudentEntity;
 import com.certichain.student.StudentRepository;
@@ -15,7 +17,10 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,17 +36,23 @@ public class RecordsController {
     private final StudentRepository students;
     private final CertificateRepository certificates;
     private final VerificationLogRepository logs;
-    private final LocalChainService chain;
+    private final ChainService chain;
+    private final CertificateStorage storage;
+    private final DocumentScanService scanner;
 
     public RecordsController(
             StudentRepository students,
             CertificateRepository certificates,
             VerificationLogRepository logs,
-            LocalChainService chain) {
+            ChainService chain,
+            CertificateStorage storage,
+            DocumentScanService scanner) {
         this.students = students;
         this.certificates = certificates;
         this.logs = logs;
         this.chain = chain;
+        this.storage = storage;
+        this.scanner = scanner;
     }
 
     @GetMapping("/api/students")
@@ -86,11 +97,15 @@ public class RecordsController {
         if ("ISSUED".equals(request.status())) {
             certificate.setDocumentHash(CanonicalHasher.sha256(CanonicalHasher.canonical(
                     id, student.getName(), certificate.getDegree(), request.issueDate(), certificate.getGrade())));
-            chain.anchor(certificate);
+            storage.store(certificate, CertificatePdf.render(certificate, student));
+            chain.sync(certificate);
         } else {
             certificate.setDocumentHash("");
-            certificate.setChainStatus(LocalChainService.NOT_ANCHORED);
+            certificate.setFileHash("");
+            certificate.setFileKey("");
+            certificate.setChainStatus(ChainService.NOT_ANCHORED);
             certificate.setChainTxHash("");
+            certificate.setChainNetwork("");
         }
         return CertificateResponse.from(certificates.save(certificate));
     }
@@ -104,12 +119,28 @@ public class RecordsController {
         }
         certificate.setStatus("REVOKED");
         certificate.setRevokedReason(request.reason().trim());
+        chain.sync(certificate);
         return CertificateResponse.from(certificates.save(certificate));
     }
 
     @GetMapping("/api/verification-logs")
     public List<LogResponse> listLogs() {
         return logs.findAllByOrderByVerifiedAtDesc().stream().map(LogResponse::from).toList();
+    }
+
+    @GetMapping("/api/public/verify/{id}/document")
+    public ResponseEntity<byte[]> document(@PathVariable String id) {
+        CertificateEntity certificate = certificates.findById(id)
+                .filter(item -> !"DRAFT".equals(item.getStatus()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No issued certificate uses this ID."));
+        StudentEntity student = students.findById(certificate.getStudentId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student record is missing."));
+        byte[] pdf = storage.loadOrCreate(certificate, student);
+        certificates.save(certificate);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + certificate.getId() + ".pdf\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
     }
 
     @GetMapping("/api/public/verify/{id}")
@@ -126,8 +157,11 @@ public class RecordsController {
             writeLog(id, "NOT_FOUND", "DOCUMENT_CHECK");
             return new FileCheckResponse("NOT_FOUND", "", view.documentHash());
         }
+        CertificateEntity certificate = certificates.findById(id).orElseThrow();
         String fileHash = CanonicalHasher.sha256(file.getBytes());
-        String result = fileHash.equals(view.documentHash()) ? "VERIFIED" : "HASH_MISMATCH";
+        boolean matches = fileHash.equals(certificate.getDocumentHash())
+                || (!certificate.getFileHash().isBlank() && fileHash.equals(certificate.getFileHash()));
+        String result = !matches ? "HASH_MISMATCH" : "REVOKED".equals(certificate.getStatus()) ? "REVOKED" : "VERIFIED";
         writeLog(id, result, "DOCUMENT_CHECK");
         return new FileCheckResponse(result, fileHash, view.documentHash());
     }
@@ -140,13 +174,11 @@ public class RecordsController {
         }
         StudentEntity student = students.findById(certificate.getStudentId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student record is missing."));
-        List<DocumentScanService.FieldComparison> fields = DocumentScanService.compare(certificate, student, file.getBytes());
-        boolean allMatch = fields.stream().allMatch(DocumentScanService.FieldComparison::match);
-        writeLog(id, allMatch ? "VERIFIED" : "HASH_MISMATCH", "DOCUMENT_CHECK");
-        return new ScanResponse(
-                allMatch ? "VERIFIED" : "HASH_MISMATCH",
-                "Field scan compares the uploaded text with the issued record. Image OCR is not running yet. The hash check stays authoritative.",
-                fields);
+        DocumentScanService.ScanOutcome outcome = scanner.scan(certificate, student, file.getBytes());
+        boolean allMatch = outcome.fields().stream().allMatch(DocumentScanService.FieldComparison::match);
+        String result = allMatch && "REVOKED".equals(certificate.getStatus()) ? "REVOKED" : allMatch ? "VERIFIED" : "HASH_MISMATCH";
+        writeLog(id, result, "DOCUMENT_CHECK");
+        return new ScanResponse(result, outcome.note(), outcome.fields());
     }
 
     private PublicVerification readPublic(String id) {
@@ -172,7 +204,8 @@ public class RecordsController {
                 certificate.getDocumentHash(),
                 certificate.getRevokedReason(),
                 certificate.getChainStatus(),
-                certificate.getChainTxHash());
+                certificate.getChainTxHash(),
+                certificate.getChainNetwork());
     }
 
     private void writeLog(String certificateId, String result, String type) {
@@ -239,7 +272,8 @@ public class RecordsController {
             String documentHash,
             String revokedReason,
             String chainStatus,
-            String chainTxHash) {
+            String chainTxHash,
+            String chainNetwork) {
         static CertificateResponse from(CertificateEntity certificate) {
             return new CertificateResponse(
                     certificate.getId(),
@@ -253,7 +287,8 @@ public class RecordsController {
                     certificate.getDocumentHash(),
                     certificate.getRevokedReason(),
                     certificate.getChainStatus(),
-                    certificate.getChainTxHash());
+                    certificate.getChainTxHash(),
+                    certificate.getChainNetwork());
         }
     }
 
@@ -279,9 +314,10 @@ public class RecordsController {
             String documentHash,
             String revokedReason,
             String chainStatus,
-            String chainTxHash) {
+            String chainTxHash,
+            String chainNetwork) {
         static PublicVerification missing(String id) {
-            return new PublicVerification(id, "NOT_FOUND", "", "", "", "", "", "", CanonicalHasher.INSTITUTION, "", "", "", "");
+            return new PublicVerification(id, "NOT_FOUND", "", "", "", "", "", "", CanonicalHasher.INSTITUTION, "", "", "", "", "");
         }
     }
 

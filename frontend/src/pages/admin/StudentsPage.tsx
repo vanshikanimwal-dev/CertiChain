@@ -63,7 +63,7 @@ export function StudentsPage() {
       />
       {message ? <p className="mb-4 text-sm text-seal">{message}</p> : null}
       {open ? (
-        <form onSubmit={submit} className="mb-6 grid gap-4 border border-line bg-white p-4 sm:grid-cols-2">
+        <form onSubmit={submit} className="panel mb-6 grid gap-4 p-5 sm:grid-cols-2">
           <Field label="Full name">
             <TextInput value={form.name} onChange={(event) => update("name", event.target.value)} required />
           </Field>

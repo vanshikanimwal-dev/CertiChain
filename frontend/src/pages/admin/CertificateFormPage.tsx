@@ -76,7 +76,7 @@ export function CertificateFormPage() {
         }
       />
       <form onSubmit={submit} className="grid items-start gap-8 xl:grid-cols-[0.9fr_1.1fr]">
-        <div className="space-y-4 border border-line bg-white p-4">
+        <div className="panel space-y-4 p-5">
           <Field label="Student">
             <SelectInput value={studentId} onChange={(event) => applyStudent(event.target.value)} required>
               {students.length === 0 ? <option value="">No students yet</option> : null}

@@ -31,3 +31,14 @@ export function greeting(date = new Date()): string {
 export function verificationPath(certificateId: string): string {
   return `/verify/${certificateId}`;
 }
+
+export function chainSummary(status?: string, tx?: string, network?: string): string {
+  if (status === "ANCHORED" && tx?.startsWith("0x")) {
+    const where = network === "sepolia" ? "Sepolia" : "the local chain";
+    return `Anchored on ${where}. Transaction ${tx}.`;
+  }
+  if (status === "ANCHORED_LOCALLY" || tx?.startsWith("local-")) {
+    return `Local anchor ${tx}. The chain node has not confirmed this record yet.`;
+  }
+  return "Not anchored yet.";
+}

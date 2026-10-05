@@ -15,18 +15,19 @@ export function CertificateSheet({
   const verifyUrl = `${window.location.origin}${verificationPath(certificate.id)}`;
 
   return (
-    <article className="border border-line bg-white px-6 py-8 sm:px-10">
-      <div className="flex items-start justify-between gap-6">
+    <article className="panel bg-[linear-gradient(180deg,#fffdf8,#ffffff_28%)] p-3 sm:p-4">
+      <div className="border border-brass/45 px-6 py-8 sm:px-10">
+      <div className="flex items-start justify-between gap-6 border-b border-line pb-6">
         <div>
-          <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">{INSTITUTION_NAME}</p>
+          <p className="text-xs font-semibold tracking-[0.2em] text-brass uppercase">{INSTITUTION_NAME}</p>
           <h2 className="mt-3 font-serif text-3xl text-ink">{certificate.certificateType} certificate</h2>
         </div>
-        <div className="hidden h-14 w-14 shrink-0 items-center justify-center rounded-full border border-seal text-xs font-semibold tracking-wide text-seal sm:flex">
+        <div className="hidden h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-seal text-xs font-semibold tracking-[0.14em] text-seal sm:flex">
           CC
         </div>
       </div>
       <p className="mt-8 text-sm text-muted">This record certifies that</p>
-      <p className="mt-1 font-serif text-3xl text-ink">{student?.name ?? "Unknown student"}</p>
+      <p className="mt-1 font-serif text-4xl leading-tight text-ink">{student?.name ?? "Unknown student"}</p>
       <p className="mt-4 max-w-md text-sm leading-6 text-ink">
         has completed <span className="font-semibold">{certificate.degree || "—"}</span> in the{" "}
         {certificate.department || "—"} department.
@@ -58,13 +59,16 @@ export function CertificateSheet({
       )}
       {showQr && certificate.status === "ISSUED" ? (
         <div className="mt-6 flex items-center gap-4 border-t border-line pt-6">
-          <QRCodeSVG value={verifyUrl} size={96} bgColor="#ffffff" fgColor="#141c27" />
+          <div className="rounded-xl bg-white p-2 shadow-sm ring-1 ring-line">
+            <QRCodeSVG value={verifyUrl} size={96} bgColor="#ffffff" fgColor="#121922" />
+          </div>
           <div>
-            <p className="text-sm font-medium">Scan to verify</p>
+            <p className="text-sm font-semibold">Scan to verify</p>
             <p className="mt-1 max-w-xs text-xs leading-5 break-all text-muted">{verifyUrl}</p>
           </div>
         </div>
       ) : null}
+      </div>
     </article>
   );
 }

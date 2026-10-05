@@ -46,6 +46,15 @@ public class CertificateEntity {
     @Column(name = "chain_tx_hash", nullable = false)
     private String chainTxHash = "";
 
+    @Column(name = "chain_network", nullable = false)
+    private String chainNetwork = "";
+
+    @Column(name = "file_hash", nullable = false)
+    private String fileHash = "";
+
+    @Column(name = "file_key", nullable = false)
+    private String fileKey = "";
+
     public String getId() {
         return id;
     }
@@ -140,5 +149,29 @@ public class CertificateEntity {
 
     public void setChainTxHash(String chainTxHash) {
         this.chainTxHash = chainTxHash;
+    }
+
+    public String getChainNetwork() {
+        return chainNetwork;
+    }
+
+    public void setChainNetwork(String chainNetwork) {
+        this.chainNetwork = chainNetwork;
+    }
+
+    public String getFileHash() {
+        return fileHash;
+    }
+
+    public void setFileHash(String fileHash) {
+        this.fileHash = fileHash;
+    }
+
+    public String getFileKey() {
+        return fileKey;
+    }
+
+    public void setFileKey(String fileKey) {
+        this.fileKey = fileKey;
     }
 }

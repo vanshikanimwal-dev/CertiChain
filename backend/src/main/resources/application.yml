@@ -12,6 +12,10 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 server:
   port: ${SERVER_PORT:8080}
@@ -30,6 +34,16 @@ certichain:
   jwt:
     secret: ${JWT_SECRET:dev-only-certichain-jwt-secret-change-me-32b}
     expiration-minutes: 720
+  chain:
+    rpc-url: ${CHAIN_RPC_URL:http://localhost:8545}
+    chain-id: ${CHAIN_ID:31337}
+  storage:
+    endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
+    access-key: ${MINIO_ROOT_USER:certichain}
+    secret-key: ${MINIO_ROOT_PASSWORD:certichainsecret}
+    bucket: ${MINIO_BUCKET:certichain}
+  ocr:
+    url: ${OCR_URL:http://localhost:8070}
 
 springdoc:
   api-docs:

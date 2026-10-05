@@ -1,6 +1,6 @@
 package com.certichain.seed;
 
-import com.certichain.blockchain.LocalChainService;
+import com.certichain.blockchain.ChainService;
 import com.certichain.certificate.CertificateEntity;
 import com.certichain.certificate.CertificateRepository;
 import com.certichain.crypto.CanonicalHasher;
@@ -16,11 +16,13 @@ import java.util.UUID;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 @Profile("dev")
+@Order(1)
 public class DemoDataSeeder implements ApplicationRunner {
 
     private final UserAccountRepository users;
@@ -28,21 +30,18 @@ public class DemoDataSeeder implements ApplicationRunner {
     private final CertificateRepository certificates;
     private final VerificationLogRepository logs;
     private final PasswordEncoder passwordEncoder;
-    private final LocalChainService chain;
 
     public DemoDataSeeder(
             UserAccountRepository users,
             StudentRepository students,
             CertificateRepository certificates,
             VerificationLogRepository logs,
-            PasswordEncoder passwordEncoder,
-            LocalChainService chain) {
+            PasswordEncoder passwordEncoder) {
         this.users = users;
         this.students = students;
         this.certificates = certificates;
         this.logs = logs;
         this.passwordEncoder = passwordEncoder;
-        this.chain = chain;
     }
 
     @Override
@@ -97,7 +96,11 @@ public class DemoDataSeeder implements ApplicationRunner {
         certificate.setStatus(status);
         certificate.setDocumentHash(CanonicalHasher.sha256(CanonicalHasher.canonical(id, student.getName(), degree, date.toString(), grade)));
         certificate.setRevokedReason(reason);
-        chain.anchor(certificate);
+        certificate.setChainStatus(ChainService.NOT_ANCHORED);
+        certificate.setChainTxHash("");
+        certificate.setChainNetwork("");
+        certificate.setFileHash("");
+        certificate.setFileKey("");
         return certificate;
     }
 

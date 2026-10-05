@@ -24,13 +24,14 @@ export function DashboardPage() {
       <PageHeader
         eyebrow={INSTITUTION_NAME}
         title={greeting()}
-        lede={`${session?.name ?? "Admin"} can issue certificates here and check them on the public verification page. Blockchain registration comes after this console is in place.`}
+        lede={`${session?.name ?? "Admin"}, the registry is ready. Issue a credential, then open its public page to check the hash and local anchor.`}
       />
-      <div className="grid grid-cols-2 gap-px bg-line md:grid-cols-3 xl:grid-cols-5">
-        {stats.map((stat) => (
-          <div key={stat.label} className="bg-white px-4 py-5">
-            <p className="font-serif text-3xl">{stat.value}</p>
-            <p className="mt-1 text-xs tracking-[0.12em] text-muted uppercase">{stat.label}</p>
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
+        {stats.map((stat, index) => (
+          <div key={stat.label} className="panel relative overflow-hidden px-4 py-5">
+            <span className={`absolute inset-x-0 top-0 h-1 ${index % 2 === 0 ? "bg-seal" : "bg-brass"}`} />
+            <p className="font-serif text-4xl leading-none">{stat.value}</p>
+            <p className="mt-2 text-[11px] font-semibold tracking-[0.14em] text-muted uppercase">{stat.label}</p>
           </div>
         ))}
       </div>
@@ -64,7 +65,7 @@ export function DashboardPage() {
         </section>
         <section>
           <h2 className="mb-3 font-serif text-2xl">Latest checks</h2>
-          <ul className="border border-line bg-white">
+          <ul className="panel overflow-hidden">
             {logs.slice(0, 5).map((log) => (
               <li key={log.id} className="border-b border-line px-4 py-3 last:border-0">
                 <div className="flex items-center justify-between gap-3">

@@ -10,7 +10,7 @@ export function HistoryPage() {
     <div>
       <PageHeader
         title="Verification log"
-        lede="Each public lookup and document check is stored with the browser preview so you can see what an employer did."
+        lede="Every public lookup and document check is kept here, so you can see what an employer opened."
       />
       <DataTable headers={["When", "Certificate", "Check", "Result"]}>
         {logs.map((log) => (

@@ -9,14 +9,18 @@ flowchart LR
   web[Admin and public website]
   api[Spring Boot API]
   db[(PostgreSQL 16)]
-  files[MinIO or S3]
+  files[MinIO]
+  chain[Local chain or Sepolia]
+  ocr[Image reader]
 
   web --> api
   api --> db
   api --> files
+  api --> chain
+  api --> ocr
 ```
 
-The website already runs in the browser with local demo data. This phase adds the API skeleton and local Postgres and MinIO. Authentication, certificate issuing, blockchain, and document scanning are not in this phase.
+The admin console and the public verification page use the API. Issuing a certificate writes an SHA-256 fingerprint, stores a PDF in MinIO, and registers that fingerprint in the `CertificateRegistry` contract. By default the contract runs on a local Anvil chain. Set `CHAIN_RPC_URL`, `CHAIN_PRIVATE_KEY`, and `CHAIN_ID=11155111` to anchor on Sepolia instead. Do not commit a funded key. The public Anvil development key in the dev profile must never be funded on a public network.
 
 ## Run the API
 
@@ -41,7 +45,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173 and sign in with `admin@demouniversity.edu` / `certichain`. The site still keeps its own browser data until a later phase connects it to this API.
+Open http://localhost:5173 and sign in with `admin@demouniversity.edu` / `certichain`. A public check such as http://localhost:5173/verify/CERT-2026-001245 can download the issued PDF, confirm that file, or scan a PDF, text record, or image.
 
 ## Tests
 

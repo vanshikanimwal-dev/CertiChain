@@ -7,3 +7,6 @@ spring:
 certichain:
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+  chain:
+    # Public Anvil development account 0. Never fund this key on a public network.
+    private-key: ${CHAIN_PRIVATE_KEY:0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80}

@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { CertificateSheet } from "../../components/CertificateSheet";
 import { Button, Field, PageHeader, StatusPill, TextArea } from "../../components/ui";
-import { verificationPath } from "../../lib/format";
+import { chainSummary, verificationPath } from "../../lib/format";
 import { useRecords } from "../../state/records";
 
 export function CertificateDetailPage() {
@@ -81,7 +81,7 @@ export function CertificateDetailPage() {
       </div>
       <div className="grid items-start gap-8 xl:grid-cols-[1.1fr_0.8fr]">
         <CertificateSheet certificate={certificate} student={student} showQr />
-        <aside className="space-y-4 border border-line bg-white p-4">
+        <aside className="panel space-y-4 p-5">
           <h2 className="font-serif text-2xl">Record</h2>
           <dl className="space-y-3 text-sm">
             <div>
@@ -97,9 +97,7 @@ export function CertificateDetailPage() {
             <div>
               <dt className="text-xs tracking-[0.12em] text-muted uppercase">Blockchain</dt>
               <dd className="mt-1 text-sm">
-                {certificate.chainStatus === "ANCHORED_LOCALLY"
-                  ? `Local anchor ${certificate.chainTxHash}. Sepolia is not connected yet.`
-                  : "Not anchored yet."}
+                {chainSummary(certificate.chainStatus, certificate.chainTxHash, certificate.chainNetwork)}
               </dd>
             </div>
             {certificate.status === "REVOKED" ? (

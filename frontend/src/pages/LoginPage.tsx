@@ -32,23 +32,30 @@ export function LoginPage() {
   }
 
   return (
-    <div className="grid min-h-screen lg:grid-cols-2">
-      <section className="flex flex-col justify-between bg-navy px-8 py-10 text-paper sm:px-12">
-        <div>
-          <p className="text-xs font-medium tracking-[0.18em] text-paper/60 uppercase">CertiChain</p>
-          <h1 className="mt-8 max-w-md font-serif text-5xl leading-tight">
-            Issue a certificate once. Verify it anywhere.
+    <div className="grid min-h-screen lg:grid-cols-[1.15fr_0.85fr]">
+      <section className="relative flex flex-col justify-between overflow-hidden bg-navy px-8 py-10 text-paper sm:px-14">
+        <div className="pointer-events-none absolute -top-16 -right-16 h-64 w-64 rounded-full border border-brass/40" />
+        <div className="pointer-events-none absolute -top-4 -right-4 h-40 w-40 rounded-full border border-white/10" />
+        <div className="pointer-events-none absolute bottom-16 -left-20 h-56 w-56 rounded-full bg-seal/20 blur-3xl" />
+        <div className="relative">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-brass/80 font-serif text-sm tracking-[0.14em] text-brass">
+            CC
+          </div>
+          <p className="mt-8 text-xs font-semibold tracking-[0.2em] text-brass uppercase">CertiChain</p>
+          <h1 className="mt-4 max-w-lg font-serif text-5xl leading-[1.05] sm:text-6xl">
+            Issue a certificate once.
+            <span className="mt-2 block font-serif text-[0.92em] text-brass italic">Verify it anywhere.</span>
           </h1>
-          <p className="mt-6 max-w-md text-sm leading-6 text-paper/75">
+          <p className="mt-6 max-w-md text-sm leading-7 text-paper/75">
             {INSTITUTION_NAME} uses this console to register students, issue credentials, and publish a
             public verification page. The records in this preview are synthetic.
           </p>
         </div>
-        <p className="mt-12 text-xs tracking-[0.14em] text-paper/50 uppercase">Institution console</p>
+        <p className="relative mt-12 text-xs tracking-[0.16em] text-paper/45 uppercase">Institution console</p>
       </section>
-      <section className="flex items-center bg-paper px-6 py-12 sm:px-12">
-        <form onSubmit={submit} className="mx-auto w-full max-w-sm">
-          <h2 className="font-serif text-3xl">Sign in</h2>
+      <section className="flex items-center px-6 py-12 sm:px-12">
+        <form onSubmit={submit} className="panel mx-auto w-full max-w-md px-7 py-8">
+          <h2 className="font-serif text-4xl">Sign in</h2>
           <p className="mt-2 text-sm text-muted">Institution admin access for the local preview.</p>
           <div className="mt-8 space-y-4">
             <Field label="Email">
@@ -77,7 +84,7 @@ export function LoginPage() {
               Fill demo account
             </Button>
           </div>
-          <p className="mt-8 border border-line bg-white px-4 py-3 text-sm leading-6 text-muted">
+          <p className="mt-8 rounded-2xl bg-[#f4f7f4] px-4 py-3 text-sm leading-6 text-muted">
             Demo account
             <br />
             <span className="text-ink">{DEMO_ADMIN.email}</span>
