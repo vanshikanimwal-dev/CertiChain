@@ -1,0 +1,8 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+certichain:
+  cors:
+    allowed-origins: http://localhost:5173
