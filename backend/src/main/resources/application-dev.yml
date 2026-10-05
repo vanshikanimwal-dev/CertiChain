@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/certichain}
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/certichain}
     username: ${DB_USERNAME:certichain}
     password: ${DB_PASSWORD:certichain}
 

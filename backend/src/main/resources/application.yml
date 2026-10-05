@@ -26,6 +26,11 @@ management:
       probes:
         enabled: true
 
+certichain:
+  jwt:
+    secret: ${JWT_SECRET:dev-only-certichain-jwt-secret-change-me-32b}
+    expiration-minutes: 720
+
 springdoc:
   api-docs:
     path: /v3/api-docs

@@ -43,14 +43,19 @@ export function CertificateDetailPage() {
     }
   }
 
-  function revoke(event: FormEvent) {
+  async function revoke(event: FormEvent) {
     event.preventDefault();
     if (!certificate) return;
     if (!reason.trim()) {
       setError("Add a short reason before revoking.");
       return;
     }
-    revokeCertificate(certificate.id, reason);
+    try {
+      await revokeCertificate(certificate.id, reason);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "The certificate could not be revoked.");
+      return;
+    }
     setRevoking(false);
     setReason("");
     setError("");
@@ -87,6 +92,14 @@ export function CertificateDetailPage() {
               <dt className="text-xs tracking-[0.12em] text-muted uppercase">Integrity hash</dt>
               <dd className="mt-1 font-mono text-xs break-all">
                 {certificate.documentHash || "Written when the certificate is issued."}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-xs tracking-[0.12em] text-muted uppercase">Blockchain</dt>
+              <dd className="mt-1 text-sm">
+                {certificate.chainStatus === "ANCHORED_LOCALLY"
+                  ? `Local anchor ${certificate.chainTxHash}. Sepolia is not connected yet.`
+                  : "Not anchored yet."}
               </dd>
             </div>
             {certificate.status === "REVOKED" ? (

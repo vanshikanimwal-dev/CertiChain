@@ -31,7 +31,7 @@ mvn spring-boot:run
 - Health: http://localhost:8080/actuator/health
 - API docs: http://localhost:8080/swagger-ui.html
 
-The dev profile connects to `localhost:5432` with the database, user, and password `certichain`. Override those with the variables in `.env.example`. Do not commit a `.env` file.
+The dev profile connects to `localhost:5433` with the database, user, and password `certichain`. Port 5433 is used so this does not collide with a PostgreSQL service already installed on Windows. Override those values with the variables in `.env.example`. Do not commit a `.env` file.
 
 ## Run the website
 

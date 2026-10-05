@@ -35,6 +35,8 @@ export type Certificate = {
   status: CertificateStatus;
   documentHash: string;
   revokedReason: string;
+  chainStatus?: string;
+  chainTxHash?: string;
 };
 
 export type VerificationResult = "VERIFIED" | "REVOKED" | "HASH_MISMATCH" | "NOT_FOUND";

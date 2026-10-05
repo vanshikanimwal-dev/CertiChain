@@ -26,20 +26,25 @@ export function StudentsPage() {
     setForm((current) => ({ ...current, [field]: value }));
   }
 
-  function submit(event: FormEvent) {
+  async function submit(event: FormEvent) {
     event.preventDefault();
     const year = Number(form.graduationYear);
     if (!Number.isInteger(year) || year < 2000 || year > 2100) {
       setMessage("Enter a graduation year between 2000 and 2100.");
       return;
     }
-    addStudent({
-      name: form.name.trim(),
-      studentNumber: form.studentNumber.trim(),
-      department: form.department.trim(),
-      course: form.course.trim(),
-      graduationYear: year,
-    });
+    try {
+      await addStudent({
+        name: form.name.trim(),
+        studentNumber: form.studentNumber.trim(),
+        department: form.department.trim(),
+        course: form.course.trim(),
+        graduationYear: year,
+      });
+    } catch (caught) {
+      setMessage(caught instanceof Error ? caught.message : "The student could not be saved.");
+      return;
+    }
     setForm(emptyForm);
     setOpen(false);
     setMessage(`${form.name.trim()} is now on the student list.`);

@@ -65,7 +65,7 @@ export function AdminLayout() {
                 setOpen(false);
               }}
             >
-              Reset demo
+              Reload
             </button>
           </div>
         </div>

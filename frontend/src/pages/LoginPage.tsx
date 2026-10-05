@@ -15,14 +15,14 @@ export function LoginPage() {
 
   if (session) return <Navigate to="/dashboard" replace />;
 
-  function submit(event: FormEvent) {
+  async function submit(event: FormEvent) {
     event.preventDefault();
-    const ok = login(email, password);
-    if (!ok) {
-      setError("That email or password does not match the demo admin account.");
-      return;
+    try {
+      await login(email, password);
+      navigate(from, { replace: true });
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Sign-in failed.");
     }
-    navigate(from, { replace: true });
   }
 
   function useDemoAccount() {
