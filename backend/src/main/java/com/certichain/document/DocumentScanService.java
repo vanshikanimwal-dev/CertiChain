@@ -38,6 +38,10 @@ public class DocumentScanService {
         if (fingerprint.isBlank() && pipe != null) {
             fingerprint = CanonicalHasher.sha256(Arrays.stream(pipe).map(String::trim).reduce((left, right) -> left + "|" + right).orElse(""));
         }
+        String rebuilt = rebuildFingerprint(foundId, foundName, foundDegree, foundDate, foundGrade);
+        if (!certificate.getDocumentHash().equalsIgnoreCase(fingerprint) && certificate.getDocumentHash().equalsIgnoreCase(rebuilt)) {
+            fingerprint = rebuilt;
+        }
         List<FieldComparison> fields = new ArrayList<>();
         fields.add(compareField("Certificate ID", certificate.getId(), foundId));
         fields.add(compareField("Student", student.getName(), foundName));
@@ -60,7 +64,7 @@ public class DocumentScanService {
         try {
             return new Extraction(
                     ocr.extract(fileBytes),
-                    "Text was read from the image. The fingerprint on the certificate stays the integrity proof.");
+                    "Text was read from the image. The fingerprint is calculated from the fields that were read.");
         } catch (RuntimeException exception) {
             return new Extraction("", "The image could not be read. Upload the issued PDF or the text record.");
         }
@@ -106,6 +110,13 @@ public class DocumentScanService {
             }
         }
         return null;
+    }
+
+    private static String rebuildFingerprint(String id, String name, String degree, String date, String grade) {
+        if (id.isBlank() || name.isBlank() || degree.isBlank() || date.isBlank() || grade.isBlank()) {
+            return "";
+        }
+        return CanonicalHasher.sha256(CanonicalHasher.canonical(id, name, degree, date, grade));
     }
 
     private static String first(String labeled, String[] pipe, int index) {
