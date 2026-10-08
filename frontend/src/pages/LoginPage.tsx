@@ -38,15 +38,20 @@ export function LoginPage() {
         <div className="pointer-events-none absolute -top-4 -right-4 h-40 w-40 rounded-full border border-white/10" />
         <div className="pointer-events-none absolute bottom-16 -left-20 h-56 w-56 rounded-full bg-seal/20 blur-3xl" />
         <div className="relative">
-          <LogoMark className="h-16 w-16" />
-          <p className="mt-8 text-xs font-semibold tracking-[0.2em] text-brass uppercase">CertiChain</p>
-          <h1 className="mt-4 max-w-lg font-serif text-5xl leading-[1.05] sm:text-6xl">
+          <div className="flex items-center gap-4">
+            <LogoMark className="h-24 w-24 sm:h-28 sm:w-28" />
+            <div>
+              <p className="font-serif text-3xl leading-none">CertiChain</p>
+              <p className="mt-2 text-xs font-semibold tracking-[0.18em] text-brass uppercase">{INSTITUTION_NAME}</p>
+            </div>
+          </div>
+          <h1 className="mt-10 max-w-lg font-serif text-5xl leading-[1.05] sm:text-6xl">
             Issue a certificate once.
             <span className="mt-2 block font-serif text-[0.92em] text-brass italic">Verify it anywhere.</span>
           </h1>
           <p className="mt-6 max-w-md text-sm leading-7 text-paper/75">
             {INSTITUTION_NAME} uses this console to register students, issue credentials, and publish a
-            public verification page. The records in this preview are synthetic.
+            public verification page. The records in this demo are synthetic.
           </p>
         </div>
         <p className="relative mt-12 text-xs tracking-[0.16em] text-paper/45 uppercase">Institution console</p>

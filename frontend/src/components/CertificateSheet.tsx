@@ -23,7 +23,7 @@ export function CertificateSheet({
           <p className="text-xs font-semibold tracking-[0.2em] text-brass uppercase">{INSTITUTION_NAME}</p>
           <h2 className="mt-3 font-serif text-3xl text-ink">{certificate.certificateType} certificate</h2>
         </div>
-        <LogoMark className="hidden h-16 w-16 shrink-0 sm:block" />
+        <LogoMark className="h-16 w-16 shrink-0 sm:h-20 sm:w-20" />
       </div>
       <p className="mt-8 text-sm text-muted">This record certifies that</p>
       <p className="mt-1 font-serif text-4xl leading-tight text-ink">{student?.name ?? "Unknown student"}</p>

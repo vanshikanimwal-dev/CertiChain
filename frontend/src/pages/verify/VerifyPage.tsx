@@ -156,17 +156,17 @@ export function VerifyPage() {
     <div className="min-h-screen">
       <header className="flex items-center justify-between border-b border-line/80 bg-white/70 px-4 py-4 backdrop-blur sm:px-8">
         <div className="flex items-center gap-3">
-          <LogoMark className="h-10 w-10" />
+          <LogoMark className="h-11 w-11" />
           <p className="font-serif text-2xl text-ink">CertiChain</p>
         </div>
-        <p className="text-[11px] font-semibold tracking-[0.16em] text-muted uppercase">Public verification</p>
+        <p className="hidden text-[11px] font-semibold tracking-[0.16em] text-muted uppercase sm:block">Public verification</p>
       </header>
       <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
         <section className="panel overflow-hidden">
           <div className={`px-6 py-8 sm:px-8 ${banner}`}>
             <p className="text-[11px] font-semibold tracking-[0.2em] uppercase opacity-75">Certificate verification</p>
             <div className="mt-3 flex flex-wrap items-center gap-3">
-              <h1 className="font-serif text-5xl leading-none sm:text-6xl">{headline}</h1>
+              <h1 className="font-serif text-4xl leading-[1.05] sm:text-6xl">{headline}</h1>
               {record ? <StatusPill status={publicResult} /> : null}
             </div>
             <p className="mt-4 max-w-xl text-sm leading-6 opacity-85">{explanation}</p>

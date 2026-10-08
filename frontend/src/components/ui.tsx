@@ -1,7 +1,11 @@
 import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 
-export function LogoMark({ className = "h-11 w-11" }: { className?: string }) {
-  return <img src="/logo.png" alt="" className={`rounded-full object-cover ${className}`} />;
+export function LogoMark({ className = "h-12 w-12" }: { className?: string }) {
+  return (
+    <span className={`inline-flex shrink-0 overflow-hidden rounded-full bg-navy ring-2 ring-brass/80 ${className}`}>
+      <img src="/logo.png" alt="" className="h-full w-full object-cover" />
+    </span>
+  );
 }
 
 const inputClass =
@@ -24,7 +28,7 @@ export function PageHeader({
         {eyebrow ? (
           <p className="mb-2 text-xs font-semibold tracking-[0.18em] text-brass uppercase">{eyebrow}</p>
         ) : null}
-        <h1 className="font-serif text-4xl leading-none tracking-tight text-ink sm:text-5xl">{title}</h1>
+        <h1 className="font-serif text-4xl leading-[1.08] tracking-tight text-ink sm:text-5xl">{title}</h1>
         {lede ? <p className="mt-3 max-w-xl text-sm leading-6 text-muted">{lede}</p> : null}
       </div>
       {action}
