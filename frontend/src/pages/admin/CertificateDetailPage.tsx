@@ -7,18 +7,22 @@ import { useRecords } from "../../state/records";
 
 export function CertificateDetailPage() {
   const { certificateId = "" } = useParams();
-  const { certificateById, studentById, revokeCertificate, saveCertificate } = useRecords();
+  const { certificateById, studentById, revokeCertificate, saveCertificate, ready } = useRecords();
   const certificate = certificateById(certificateId);
   const [reason, setReason] = useState("");
   const [revoking, setRevoking] = useState(false);
   const [issuing, setIssuing] = useState(false);
   const [error, setError] = useState("");
 
+  if (!ready) {
+    return <PageHeader title="Loading certificate" lede="Fetching the record from the registry." />;
+  }
+
   if (!certificate) {
     return (
       <PageHeader
         title="Certificate not found"
-        lede="That ID is not in the local preview records."
+        lede="That ID is not in the registry."
         action={
           <Link to="/certificates" className="text-sm text-seal">
             Back to certificates

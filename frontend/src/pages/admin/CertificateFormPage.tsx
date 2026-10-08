@@ -4,6 +4,12 @@ import { CertificateSheet } from "../../components/CertificateSheet";
 import { Button, Field, PageHeader, SelectInput, TextInput } from "../../components/ui";
 import { useRecords } from "../../state/records";
 
+function todayIso(): string {
+  const now = new Date();
+  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60_000);
+  return local.toISOString().slice(0, 10);
+}
+
 export function CertificateFormPage() {
   const { students, saveCertificate, studentById } = useRecords();
   const navigate = useNavigate();
@@ -11,7 +17,7 @@ export function CertificateFormPage() {
   const [certificateType, setCertificateType] = useState("Degree");
   const [degree, setDegree] = useState(students[0]?.course ?? "");
   const [department, setDepartment] = useState(students[0]?.department ?? "");
-  const [issueDate, setIssueDate] = useState("2026-10-03");
+  const [issueDate, setIssueDate] = useState(todayIso);
   const [grade, setGrade] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);

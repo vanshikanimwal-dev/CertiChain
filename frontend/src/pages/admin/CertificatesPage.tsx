@@ -8,7 +8,7 @@ import type { CertificateStatus } from "../../types";
 const filters: Array<CertificateStatus | "ALL"> = ["ALL", "ISSUED", "DRAFT", "REVOKED"];
 
 export function CertificatesPage() {
-  const { certificates, studentById } = useRecords();
+  const { certificates, studentById, ready } = useRecords();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<(typeof filters)[number]>("ALL");
 
@@ -71,7 +71,9 @@ export function CertificatesPage() {
             </td>
           </tr>
         ))}
-        {visible.length === 0 ? <EmptyRow colSpan={5}>No certificates match that filter.</EmptyRow> : null}
+        {visible.length === 0 ? (
+          <EmptyRow colSpan={5}>{ready ? "No certificates match that filter." : "Loading certificates."}</EmptyRow>
+        ) : null}
       </DataTable>
     </div>
   );

@@ -22,7 +22,7 @@ export function AdminLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-paper md:grid md:grid-cols-[240px_1fr]">
+    <div className="min-h-screen bg-paper md:grid md:grid-cols-[280px_1fr]">
       {open ? (
         <button
           className="fixed inset-0 z-20 bg-navy/40 md:hidden"

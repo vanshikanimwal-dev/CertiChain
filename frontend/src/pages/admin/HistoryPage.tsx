@@ -4,7 +4,7 @@ import { formatTimestamp } from "../../lib/format";
 import { useRecords } from "../../state/records";
 
 export function HistoryPage() {
-  const { logs } = useRecords();
+  const { logs, ready } = useRecords();
 
   return (
     <div>
@@ -27,7 +27,9 @@ export function HistoryPage() {
             </td>
           </tr>
         ))}
-        {logs.length === 0 ? <EmptyRow colSpan={4}>No verification activity yet.</EmptyRow> : null}
+        {logs.length === 0 ? (
+          <EmptyRow colSpan={4}>{ready ? "No verification activity yet." : "Loading the verification log."}</EmptyRow>
+        ) : null}
       </DataTable>
     </div>
   );

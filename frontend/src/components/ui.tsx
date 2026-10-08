@@ -83,7 +83,7 @@ export function Field({
   );
 }
 
-export function StatusPill({ status }: { status: string }) {
+export function StatusPill({ status, label }: { status: string; label?: string }) {
   const tone =
     status === "ISSUED" || status === "VERIFIED"
       ? "bg-[#e5f2eb] text-seal"
@@ -92,7 +92,7 @@ export function StatusPill({ status }: { status: string }) {
         : "bg-[#efeadd] text-muted";
   return (
     <span className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide ${tone}`}>
-      {status.replaceAll("_", " ")}
+      {label ?? status.replaceAll("_", " ")}
     </span>
   );
 }

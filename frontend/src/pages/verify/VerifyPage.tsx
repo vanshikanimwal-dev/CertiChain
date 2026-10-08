@@ -39,11 +39,18 @@ export function VerifyPage() {
   const [fileResult, setFileResult] = useState<VerificationResult | "">("");
   const [scanNote, setScanNote] = useState("");
   const [fields, setFields] = useState<FieldScan[]>([]);
+  const [actionError, setActionError] = useState("");
 
   useEffect(() => {
     let cancelled = false;
     setRecord(null);
     setLoadError("");
+    setFileName("");
+    setFileHash("");
+    setFileResult("");
+    setScanNote("");
+    setFields([]);
+    setActionError("");
     fetch(`${API_BASE}/api/public/verify/${certificateId}`)
       .then(async (response) => {
         if (!response.ok) throw new Error("The verification service did not respond.");
@@ -72,29 +79,43 @@ export function VerifyPage() {
   }
 
   async function checkFile(file: File) {
-    const result = (await postFile(`/api/public/verify/${certificateId}/check-file`, file)) as {
-      result: VerificationResult;
-      fileHash: string;
-      documentHash: string;
-    };
-    setFileName(file.name);
-    setFileHash(result.fileHash);
-    setFileResult(result.result);
+    setActionError("");
+    try {
+      const result = (await postFile(`/api/public/verify/${certificateId}/check-file`, file)) as {
+        result: VerificationResult;
+        fileHash: string;
+        documentHash: string;
+      };
+      setFileName(file.name);
+      setFileHash(result.fileHash);
+      setFileResult(result.result);
+    } catch (caught) {
+      setActionError(caught instanceof Error ? caught.message : "The file could not be checked.");
+    }
   }
 
   async function scanFile(file: File) {
-    const result = (await postFile(`/api/public/verify/${certificateId}/scan`, file)) as {
-      note: string;
-      fields: FieldScan[];
-    };
-    setScanNote(result.note);
-    setFields(result.fields);
+    setActionError("");
+    try {
+      const result = (await postFile(`/api/public/verify/${certificateId}/scan`, file)) as {
+        note: string;
+        fields: FieldScan[];
+      };
+      setScanNote(result.note);
+      setFields(result.fields);
+    } catch (caught) {
+      setActionError(caught instanceof Error ? caught.message : "The file could not be scanned.");
+    }
   }
 
   async function downloadRecord() {
     if (!record || record.status === "NOT_FOUND") return;
+    setActionError("");
     const response = await fetch(`${API_BASE}/api/public/verify/${record.certificateId}/document`);
-    if (!response.ok) return;
+    if (!response.ok) {
+      setActionError("The issued PDF could not be downloaded.");
+      return;
+    }
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
@@ -175,6 +196,7 @@ export function VerifyPage() {
               <FileButton label="Check a file" onFile={(file) => void checkFile(file)} />
               <FileButton label="Scan fields" onFile={(file) => void scanFile(file)} />
             </div>
+            {actionError ? <p className="mt-4 text-sm text-[#8c2f2f]">{actionError}</p> : null}
             {fileResult ? (
               <div className="mt-4 text-sm">
                 <p className="font-medium">
@@ -195,7 +217,7 @@ export function VerifyPage() {
                   {fields.map((field) => (
                     <li key={field.field} className="flex items-center justify-between gap-3">
                       <span>{field.field}</span>
-                      <StatusPill status={field.match ? "VERIFIED" : "HASH_MISMATCH"} />
+                      <StatusPill status={field.match ? "VERIFIED" : "HASH_MISMATCH"} label={field.match ? "Match" : "Differs"} />
                     </li>
                   ))}
                 </ul>
@@ -230,6 +252,7 @@ function FileButton({ label, onFile }: { label: string; onFile: (file: File) => 
         type="file"
         onChange={(event) => {
           const file = event.target.files?.[0];
+          event.target.value = "";
           if (file) onFile(file);
         }}
       />

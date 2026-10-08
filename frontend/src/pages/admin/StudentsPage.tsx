@@ -11,7 +11,7 @@ const emptyForm = {
 };
 
 export function StudentsPage() {
-  const { students, addStudent } = useRecords();
+  const { students, addStudent, ready } = useRecords();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
@@ -115,7 +115,9 @@ export function StudentsPage() {
             <td className="px-4 py-3">{student.graduationYear}</td>
           </tr>
         ))}
-        {visible.length === 0 ? <EmptyRow colSpan={5}>No students match that search.</EmptyRow> : null}
+        {visible.length === 0 ? (
+          <EmptyRow colSpan={5}>{ready ? "No students match that search." : "Loading students."}</EmptyRow>
+        ) : null}
       </DataTable>
     </div>
   );

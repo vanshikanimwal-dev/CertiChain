@@ -54,7 +54,7 @@ export function LoginPage() {
       <section className="flex items-center px-6 py-12 sm:px-12">
         <form onSubmit={submit} className="panel mx-auto w-full max-w-md px-7 py-8">
           <h2 className="font-serif text-4xl">Sign in</h2>
-          <p className="mt-2 text-sm text-muted">Institution admin access for the local preview.</p>
+          <p className="mt-2 text-sm text-muted">Institution admin access for Demo University.</p>
           <div className="mt-8 space-y-4">
             <Field label="Email">
               <TextInput

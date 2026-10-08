@@ -41,6 +41,7 @@ type RecordsContextValue = {
   saveCertificate: (input: CertificateInput) => Promise<Certificate>;
   revokeCertificate: (id: string, reason: string) => Promise<void>;
   resetDemo: () => Promise<void>;
+  ready: boolean;
   studentById: (id: string) => Student | undefined;
   certificateById: (id: string) => Certificate | undefined;
 };
@@ -62,16 +63,21 @@ export function RecordsProvider({ children }: { children: ReactNode }) {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [logs, setLogs] = useState<VerificationLog[]>([]);
   const [session, setSession] = useState<Session | null>(loadSession);
+  const [ready, setReady] = useState(() => loadSession() === null);
 
   const refresh = useCallback(async () => {
-    const [nextStudents, nextCertificates, nextLogs] = await Promise.all([
-      api<Student[]>("/api/students"),
-      api<Certificate[]>("/api/certificates"),
-      api<VerificationLog[]>("/api/verification-logs"),
-    ]);
-    setStudents(nextStudents);
-    setCertificates(nextCertificates);
-    setLogs(nextLogs);
+    try {
+      const [nextStudents, nextCertificates, nextLogs] = await Promise.all([
+        api<Student[]>("/api/students"),
+        api<Certificate[]>("/api/certificates"),
+        api<VerificationLog[]>("/api/verification-logs"),
+      ]);
+      setStudents(nextStudents);
+      setCertificates(nextCertificates);
+      setLogs(nextLogs);
+    } finally {
+      setReady(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -141,10 +147,11 @@ export function RecordsProvider({ children }: { children: ReactNode }) {
       saveCertificate,
       revokeCertificate,
       resetDemo: refresh,
+      ready,
       studentById: (id) => students.find((item) => item.id === id),
       certificateById: (id) => certificates.find((item) => item.id === id),
     }),
-    [students, certificates, logs, session, login, logout, addStudent, saveCertificate, revokeCertificate, refresh],
+    [students, certificates, logs, session, login, logout, addStudent, saveCertificate, revokeCertificate, refresh, ready],
   );
 
   return <RecordsContext.Provider value={value}>{children}</RecordsContext.Provider>;
