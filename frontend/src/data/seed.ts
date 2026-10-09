@@ -6,7 +6,7 @@ export function createSeed(): RecordsState {
       {
         id: "stu-vanshika",
         name: "Vanshika Nimwal",
-        studentNumber: "DU2022001",
+        studentNumber: "CC2022001",
         department: "Computer Science",
         course: "B.Tech Computer Science",
         graduationYear: 2026,
@@ -14,7 +14,7 @@ export function createSeed(): RecordsState {
       {
         id: "stu-arjun",
         name: "Arjun Mehta",
-        studentNumber: "DU2022044",
+        studentNumber: "CC2022044",
         department: "Computer Science",
         course: "B.Tech Computer Science",
         graduationYear: 2026,
@@ -22,7 +22,7 @@ export function createSeed(): RecordsState {
       {
         id: "stu-meera",
         name: "Meera Iyer",
-        studentNumber: "DU2022118",
+        studentNumber: "CC2022118",
         department: "Electronics",
         course: "B.Tech Electronics and Communication",
         graduationYear: 2026,
@@ -38,7 +38,7 @@ export function createSeed(): RecordsState {
         issueDate: "2026-09-30",
         grade: "8.2",
         status: "ISSUED",
-        documentHash: "0290186015a2878d7a27ccd0e04ce28d281f77a05c401f9ca0d70522e81ebb24",
+        documentHash: "9c4a7f5fd5237c33a74cf22428e82470887398553b94fe7f154460c5640133b0",
         revokedReason: "",
       },
       {
@@ -50,7 +50,7 @@ export function createSeed(): RecordsState {
         issueDate: "2026-09-30",
         grade: "8.7",
         status: "ISSUED",
-        documentHash: "698db744358275c7c15e1cf06f7900e2d2bf374427c2118a276ae28a0946b054",
+        documentHash: "7e27071e1b6c103cad10f7346cffac6b7890ddf7a67b4924010b59f3c0ecc65f",
         revokedReason: "",
       },
       {
@@ -62,7 +62,7 @@ export function createSeed(): RecordsState {
         issueDate: "2026-06-12",
         grade: "7.9",
         status: "REVOKED",
-        documentHash: "54ef3be2c656a06135c78e0cc414ba140f6e563d39b7b0645114ed5098e45d7b",
+        documentHash: "b766149cf1402fd1b208846cf5f019875a848a9d8454520c8981ed7659b2191f",
         revokedReason: "Issued against the wrong program.",
       },
     ],

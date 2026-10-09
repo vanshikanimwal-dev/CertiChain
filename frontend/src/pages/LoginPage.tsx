@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Button, Field, LogoMark, TextInput } from "../components/ui";
 import { useRecords } from "../state/records";
-import { DEMO_ADMIN, INSTITUTION_NAME } from "../types";
+import { DEMO_ADMIN } from "../types";
 
 export function LoginPage() {
   const { session, login } = useRecords();
@@ -40,18 +40,15 @@ export function LoginPage() {
         <div className="relative">
           <div className="flex items-center gap-4">
             <LogoMark className="h-24 w-24 sm:h-28 sm:w-28" />
-            <div>
-              <p className="font-serif text-3xl leading-none">CertiChain</p>
-              <p className="mt-2 text-xs font-semibold tracking-[0.18em] text-brass uppercase">{INSTITUTION_NAME}</p>
-            </div>
+            <p className="font-serif text-3xl leading-none">CertiChain</p>
           </div>
           <h1 className="mt-10 max-w-lg font-serif text-5xl leading-[1.05] sm:text-6xl">
             Issue a certificate once.
             <span className="mt-2 block font-serif text-[0.92em] text-brass italic">Verify it anywhere.</span>
           </h1>
           <p className="mt-6 max-w-md text-sm leading-7 text-paper/75">
-            {INSTITUTION_NAME} uses this console to register students, issue credentials, and publish a
-            public verification page. The records in this demo are synthetic.
+            Register students, issue credentials, and publish a public verification page. The records in
+            this demo are synthetic.
           </p>
         </div>
         <p className="relative mt-12 text-xs tracking-[0.16em] text-paper/45 uppercase">Institution console</p>
@@ -59,7 +56,7 @@ export function LoginPage() {
       <section className="flex items-center px-6 py-12 sm:px-12">
         <form onSubmit={submit} className="panel mx-auto w-full max-w-md px-7 py-8">
           <h2 className="font-serif text-4xl">Sign in</h2>
-          <p className="mt-2 text-sm text-muted">Institution admin access for Demo University.</p>
+          <p className="mt-2 text-sm text-muted">Sign in to the institution console.</p>
           <div className="mt-8 space-y-4">
             <Field label="Email">
               <TextInput

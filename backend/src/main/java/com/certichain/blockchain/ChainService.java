@@ -83,6 +83,14 @@ public class ChainService {
             if (!current.exists()) {
                 txHash = send("registerCertificate", List.of(new Utf8String(certificate.getId()), new Bytes32(hash)));
                 current = new OnChain(true, false, true);
+            } else if (!current.matches()) {
+                log.warn("Certificate {} is registered under a different fingerprint.", certificate.getId());
+                boolean changed = !NOT_ANCHORED.equals(certificate.getChainStatus())
+                        || (certificate.getChainTxHash() != null && !certificate.getChainTxHash().isBlank());
+                certificate.setChainStatus(NOT_ANCHORED);
+                certificate.setChainTxHash("");
+                certificate.setChainNetwork("");
+                return changed;
             } else if (!txHash.startsWith("0x")) {
                 String recovered = findRegisterTx(certificate.getId());
                 if (!recovered.isBlank()) {

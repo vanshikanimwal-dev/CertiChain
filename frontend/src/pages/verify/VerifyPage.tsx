@@ -229,7 +229,7 @@ export function VerifyPage() {
         )}
         </section>
         <p className="mt-6 text-xs leading-5 text-muted">
-          These are synthetic demonstration records for {INSTITUTION_NAME}. They are not official academic credentials.
+          These records are synthetic. They are not official academic credentials.
         </p>
       </main>
     </div>

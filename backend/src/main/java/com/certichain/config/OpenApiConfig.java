@@ -13,6 +13,6 @@ public class OpenApiConfig {
         return new OpenAPI().info(new Info()
                 .title("CertiChain API")
                 .version("0.1.0")
-                .description("Demo University certificate API. All records are synthetic."));
+                .description("Certificate API. All records are synthetic."));
     }
 }

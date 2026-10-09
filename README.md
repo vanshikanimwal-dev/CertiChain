@@ -1,6 +1,6 @@
 # CertiChain
 
-CertiChain is a prototype where Demo University issues a digital certificate and anyone can check it from a public link. The certificate file stays off-chain. An SHA-256 fingerprint is what later gets anchored. Records in this project are synthetic. They are not real academic credentials.
+CertiChain issues a digital certificate and anyone can check it from a public link. The certificate file stays off-chain. An SHA-256 fingerprint is what later gets anchored. Records in this project are synthetic. They are not real academic credentials.
 
 ## Architecture
 
@@ -45,7 +45,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173 and sign in with `admin@demouniversity.edu` / `certichain`. A public check such as http://localhost:5173/verify/CERT-2026-001245 can download the issued PDF, confirm that file, or scan a PDF, text record, or image.
+Open http://localhost:5173 and sign in with `admin@certichain.local` / `certichain`. A public check such as http://localhost:5173/verify/CERT-2026-001245 can download the issued PDF, confirm that file, or scan a PDF, text record, or image.
 
 ## Tests
 

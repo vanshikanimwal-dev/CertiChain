@@ -12,6 +12,7 @@ import com.certichain.verification.VerificationLogEntity;
 import com.certichain.verification.VerificationLogRepository;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -46,20 +47,26 @@ public class DemoDataSeeder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        users.findByEmailIgnoreCase("admin@demouniversity.edu").ifPresent(admin -> {
+            admin.setEmail("admin@certichain.local");
+            users.save(admin);
+        });
         if (users.count() > 0) {
+            renameLegacyStudentNumbers();
+            refreshFingerprints();
             return;
         }
         UserAccount admin = new UserAccount();
         admin.setId(UUID.randomUUID());
-        admin.setEmail("admin@demouniversity.edu");
+        admin.setEmail("admin@certichain.local");
         admin.setFullName("Institution Admin");
         admin.setRole("INSTITUTION_ADMIN");
         admin.setPasswordHash(passwordEncoder.encode("certichain"));
         users.save(admin);
 
-        StudentEntity vanshika = student("stu-vanshika", "Vanshika Nimwal", "DU2022001", "Computer Science", "B.Tech Computer Science", 2026);
-        StudentEntity arjun = student("stu-arjun", "Arjun Mehta", "DU2022044", "Computer Science", "B.Tech Computer Science", 2026);
-        StudentEntity meera = student("stu-meera", "Meera Iyer", "DU2022118", "Electronics", "B.Tech Electronics and Communication", 2026);
+        StudentEntity vanshika = student("stu-vanshika", "Vanshika Nimwal", "CC2022001", "Computer Science", "B.Tech Computer Science", 2026);
+        StudentEntity arjun = student("stu-arjun", "Arjun Mehta", "CC2022044", "Computer Science", "B.Tech Computer Science", 2026);
+        StudentEntity meera = student("stu-meera", "Meera Iyer", "CC2022118", "Electronics", "B.Tech Electronics and Communication", 2026);
         students.save(vanshika);
         students.save(arjun);
         students.save(meera);
@@ -71,6 +78,46 @@ public class DemoDataSeeder implements ApplicationRunner {
         log("CERT-2026-001245", "VERIFIED", Instant.parse("2026-10-02T08:40:00Z"));
         log("CERT-2026-001188", "VERIFIED", Instant.parse("2026-10-02T11:15:00Z"));
         log("CERT-2026-000902", "REVOKED", Instant.parse("2026-10-03T04:05:00Z"));
+    }
+
+    private void renameLegacyStudentNumbers() {
+        Map<String, String> numbers = Map.of(
+                "DU2022001", "CC2022001",
+                "DU2022044", "CC2022044",
+                "DU2022118", "CC2022118");
+        for (StudentEntity student : students.findAll()) {
+            String next = numbers.get(student.getStudentNumber());
+            if (next == null) {
+                continue;
+            }
+            student.setStudentNumber(next);
+            students.save(student);
+        }
+    }
+
+    private void refreshFingerprints() {
+        for (CertificateEntity certificate : certificates.findAll()) {
+            StudentEntity student = students.findById(certificate.getStudentId()).orElse(null);
+            if (student == null || certificate.getIssueDate() == null) {
+                continue;
+            }
+            String next = CanonicalHasher.sha256(CanonicalHasher.canonical(
+                    certificate.getId(),
+                    student.getName(),
+                    certificate.getDegree(),
+                    certificate.getIssueDate().toString(),
+                    certificate.getGrade()));
+            if (next.equals(certificate.getDocumentHash())) {
+                continue;
+            }
+            certificate.setDocumentHash(next);
+            certificate.setFileHash("");
+            certificate.setFileKey("");
+            certificate.setChainStatus(ChainService.NOT_ANCHORED);
+            certificate.setChainTxHash("");
+            certificate.setChainNetwork("");
+            certificates.save(certificate);
+        }
     }
 
     private StudentEntity student(String id, String name, String number, String department, String course, int year) {

@@ -1,8 +1,8 @@
-export const INSTITUTION_NAME = "Demo University";
+export const INSTITUTION_NAME = "CertiChain";
 
 export const DEMO_ADMIN = {
   name: "Institution Admin",
-  email: "admin@demouniversity.edu",
+  email: "admin@certichain.local",
   password: "certichain",
   role: "INSTITUTION_ADMIN",
 } as const;

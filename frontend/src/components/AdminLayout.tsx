@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { LogoMark } from "./ui";
-import { INSTITUTION_NAME } from "../types";
 import { useRecords } from "../state/records";
 
 const links = [
@@ -36,10 +35,7 @@ export function AdminLayout() {
         <div className="border-b border-white/10 px-5 py-7">
           <div className="flex items-center gap-3">
             <LogoMark />
-            <div>
-              <p className="font-serif text-2xl leading-none">CertiChain</p>
-              <p className="mt-1 text-[11px] tracking-[0.16em] text-paper/55 uppercase">{INSTITUTION_NAME}</p>
-            </div>
+            <p className="font-serif text-2xl leading-none">CertiChain</p>
           </div>
         </div>
         <nav className="flex flex-1 flex-col gap-1 px-3 py-5">

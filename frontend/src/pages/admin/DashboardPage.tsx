@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { DataTable, EmptyRow, PageHeader, StatusPill } from "../../components/ui";
 import { formatTimestamp, greeting } from "../../lib/format";
 import { useRecords } from "../../state/records";
-import { INSTITUTION_NAME } from "../../types";
 
 export function DashboardPage() {
   const { session, students, certificates, logs, studentById } = useRecords();
@@ -22,7 +21,6 @@ export function DashboardPage() {
   return (
     <div>
       <PageHeader
-        eyebrow={INSTITUTION_NAME}
         title={greeting()}
         lede={`${session?.name ?? "Admin"}, the registry is ready. Issue a credential, then open its public page to check the hash and local anchor.`}
       />

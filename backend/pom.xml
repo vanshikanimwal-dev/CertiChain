@@ -15,7 +15,7 @@
     <artifactId>certichain</artifactId>
     <version>0.1.0</version>
     <name>certichain</name>
-    <description>Synthetic academic credential API for Demo University.</description>
+    <description>Synthetic academic credential API.</description>
 
     <properties>
         <java.version>21</java.version>

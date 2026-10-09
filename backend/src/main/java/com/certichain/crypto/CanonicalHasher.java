@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 public final class CanonicalHasher {
 
-    public static final String INSTITUTION = "Demo University";
+    public static final String INSTITUTION = "CertiChain";
 
     private CanonicalHasher() {
     }
